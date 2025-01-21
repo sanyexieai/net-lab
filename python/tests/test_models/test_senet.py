@@ -1,6 +1,7 @@
 import torch
 import pytest
-from neural_networks.models.senet import SENet, SEBasicBlock, SELayer
+from neural_networks.layers.se import SELayer
+from neural_networks.models.senet import SENet, SEBasicBlock
 
 @pytest.fixture
 def device():
