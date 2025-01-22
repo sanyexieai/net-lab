@@ -4,20 +4,58 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 from neural_networks.models.senet import SENet
+import os
 
 def main():
+    print(f"PyTorch版本：{torch.__version__}")
+    print(f"CUDA是否可用：{torch.cuda.is_available()}")
+    if torch.cuda.is_available():
+        print(f"CUDA版本：{torch.version.cuda}")
+        print(f"GPU设备：{torch.cuda.get_device_name(0)}")
+    
     # 设置设备
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
+    # 设置数据集保存路径 - 使用绝对路径
+    data_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../data'))
+    os.makedirs(data_path, exist_ok=True)
+    
+    print(f"数据集路径: {data_path}")
+    
+    # 检查压缩包和解压目录
+    cifar_tar = os.path.join(data_path, 'cifar-10-python.tar.gz')
+    cifar_dir = os.path.join(data_path, 'cifar-10-batches-py')
+    
+    # 如果压缩包存在但损坏，删除它
+    if os.path.exists(cifar_tar):
+        try:
+            print(f"发现压缩包: {cifar_tar}")
+            if not os.path.exists(cifar_dir):
+                print("压缩包未解压，尝试手动解压...")
+                import tarfile
+                with tarfile.open(cifar_tar, 'r:gz') as tar:
+                    tar.extractall(data_path)
+                print("手动解压完成")
+        except (EOFError, tarfile.ReadError) as e:
+            print(f"压缩包损坏: {e}")
+            print("删除损坏的压缩包...")
+            os.remove(cifar_tar)
+            if os.path.exists(cifar_dir):
+                import shutil
+                print("删除不完整的解压目录...")
+                shutil.rmtree(cifar_dir)
+    
     # 加载 CIFAR-10 数据集
     transform = transforms.Compose([
-        transforms.Resize(224),  # SENet 期望 224x224 输入
+        transforms.Resize(224),
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
     ])
     
-    train_dataset = datasets.CIFAR10('./data', train=True, download=True, transform=transform)
-    test_dataset = datasets.CIFAR10('./data', train=False, transform=transform)
+    print("准备数据集...")
+    train_dataset = datasets.CIFAR10(data_path, train=True, download=True, transform=transform)
+    test_dataset = datasets.CIFAR10(data_path, train=False, download=True, transform=transform)
+    print("数据集准备完成")
     
     train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size=32)

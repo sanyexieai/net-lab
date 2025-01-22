@@ -4,10 +4,17 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 from neural_networks.models.senet import SENet
+import os
 
 def main():
     # 设置设备
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    
+    # 设置数据集保存路径 - 使用绝对路径
+    data_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../data'))
+    os.makedirs(data_path, exist_ok=True)
+    
+    print(f"数据集路径: {data_path}")
     
     # 加载 MNIST 数据集
     transform = transforms.Compose([
@@ -16,8 +23,17 @@ def main():
         transforms.Normalize((0.1307,), (0.3081,))
     ])
     
-    train_dataset = datasets.MNIST('./data', train=True, download=True, transform=transform)
-    test_dataset = datasets.MNIST('./data', train=False, transform=transform)
+    # 检查数据集文件是否已存在
+    mnist_file = os.path.join(data_path, 'MNIST', 'raw', 'train-images-idx3-ubyte')
+    if os.path.exists(mnist_file):
+        print(f"发现已下载的数据集: {mnist_file}")
+        download = False
+    else:
+        print(f"数据集不存在，将下载到: {data_path}")
+        download = True
+    
+    train_dataset = datasets.MNIST(data_path, train=True, download=download, transform=transform)
+    test_dataset = datasets.MNIST(data_path, train=False, download=download, transform=transform)
     
     train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size=32)

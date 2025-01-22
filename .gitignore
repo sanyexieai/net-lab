@@ -1,0 +1,15 @@
+python/data/cifar-10-python.tar.gz
+python/data/cifar-10-batches-py/batches.meta
+python/data/cifar-10-batches-py/data_batch_1
+python/data/cifar-10-batches-py/data_batch_2
+python/data/cifar-10-batches-py/data_batch_3
+python/data/cifar-10-batches-py/data_batch_4
+python/data/cifar-10-batches-py/data_batch_5
+python/data/cifar-10-batches-py/readme.html
+python/data/cifar-10-batches-py/test_batch
+python/src/neural_networks/__pycache__/__init__.cpython-311.pyc
+python/src/neural_networks.egg-info/dependency_links.txt
+python/src/neural_networks.egg-info/PKG-INFO
+python/src/neural_networks.egg-info/requires.txt
+python/src/neural_networks.egg-info/SOURCES.txt
+python/src/neural_networks.egg-info/top_level.txt

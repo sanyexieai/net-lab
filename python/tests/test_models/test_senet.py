@@ -2,10 +2,17 @@ import torch
 import pytest
 from neural_networks.layers.se import SELayer
 from neural_networks.models.senet import SENet, SEBasicBlock
+import os
 
 @pytest.fixture
 def device():
     return torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+@pytest.fixture
+def data_path():
+    path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../data'))
+    os.makedirs(path, exist_ok=True)
+    return path
 
 class TestSELayer:
     def test_initialization(self):
