@@ -51,7 +51,7 @@ def main():
     optimizer = optim.Adam(model.parameters(), lr=0.001)
     
     # 创建保存模型的目录
-    model_dir = os.path.join(os.path.dirname(__file__), '../../models/mnist')
+    model_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../models/mnist'))
     os.makedirs(model_dir, exist_ok=True)
     model_path_pth = os.path.join(model_dir, 'senet_mnist.pth')
     model_path_safetensors = os.path.join(model_dir, 'senet_mnist.safetensors')
