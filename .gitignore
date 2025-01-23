@@ -55,3 +55,6 @@ wheels/
 !models/**/*.safetensors
 python/models/cifar/senet_cifar.pth
 python/models/cifar/senet_cifar.safetensors
+python/examples/senet/temp_mnist/700_pred1_true1.png
+python/examples/senet/temp_cifar/7923_pred9_true9.png
+python/examples/senet/debug_images/final_processed.png

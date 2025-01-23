@@ -41,9 +41,9 @@ def main():
     
     # 创建模型
     model = SENet(
-        layers=[2, 2, 2, 2],  # SENet-18 配置
-        num_classes=10,       # MNIST 有 10 个类别
-        in_channels=1         # MNIST 是单通道
+        layers=[2, 2, 2, 2],
+        num_classes=10,
+        in_channels=1
     ).to(device)
     
     # 定义损失函数和优化器

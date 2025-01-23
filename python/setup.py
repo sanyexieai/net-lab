@@ -12,5 +12,7 @@ setup(
         "matplotlib>=3.4.0",
         "pytest>=6.0.0",
         "safetensors>=0.4.0",
+        "PyQt6>=6.0.0",
+        "Pillow>=8.0.0",
     ],
 ) 
