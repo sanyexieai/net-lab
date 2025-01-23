@@ -11,5 +11,6 @@ setup(
         "numpy>=1.21.0",
         "matplotlib>=3.4.0",
         "pytest>=6.0.0",
+        "safetensors>=0.4.0",
     ],
 ) 

@@ -72,16 +72,16 @@ class SENet(nn.Module):
         block: 基本构建块类型（默认为SEBasicBlock）
         layers: 每个阶段的块数量
         num_classes: 分类类别数
+        in_channels: 输入通道数（默认为3，RGB图像）
     """
     def __init__(self, block=SEBasicBlock, layers=[2, 2, 2, 2], 
-                 num_classes: int = 1000):
+                 num_classes: int = 1000, in_channels: int = 3):
         super().__init__()
         self.inplanes = 64
         
-        # 初始卷积层
-        self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=7, 
-                              stride=2, padding=3, bias=False)
-        self.bn1 = nn.BatchNorm2d(self.inplanes)
+        # 第一个卷积层，可以处理不同的输入通道数
+        self.conv1 = nn.Conv2d(in_channels, 64, kernel_size=7, stride=2, padding=3, bias=False)
+        self.bn1 = nn.BatchNorm2d(64)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
 

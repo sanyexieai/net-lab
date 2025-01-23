@@ -13,3 +13,15 @@ python/src/neural_networks.egg-info/PKG-INFO
 python/src/neural_networks.egg-info/requires.txt
 python/src/neural_networks.egg-info/SOURCES.txt
 python/src/neural_networks.egg-info/top_level.txt
+python/data/MNIST/raw/t10k-images-idx3-ubyte
+python/data/MNIST/raw/t10k-images-idx3-ubyte.gz
+python/data/MNIST/raw/t10k-labels-idx1-ubyte
+python/data/MNIST/raw/t10k-labels-idx1-ubyte.gz
+python/data/MNIST/raw/train-images-idx3-ubyte
+python/data/MNIST/raw/train-images-idx3-ubyte.gz
+python/data/MNIST/raw/train-labels-idx1-ubyte
+python/data/MNIST/raw/train-labels-idx1-ubyte.gz
+python/models/mnist/senet_mnist.pth
+python/models/mnist/senet_mnist.safetensors
+python/src/neural_networks/models/senet/__pycache__/senet.cpython-311.pyc
+python/src/neural_networks/models/senet/__pycache__/senet.cpython-311.pyc
