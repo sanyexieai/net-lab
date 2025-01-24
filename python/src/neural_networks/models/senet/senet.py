@@ -126,31 +126,31 @@ class SENet(nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # 初始特征提取
-        print(f"输入: {x.shape}")
+        # print(f"输入: {x.shape}")
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
-        print(f"conv1 -> bn1 -> relu 输出: {x.shape}")
+        # print(f"conv1 -> bn1 -> relu 输出: {x.shape}")
         
         x = self.maxpool(x)
-        print(f"maxpool 输出: {x.shape}")
+        # print(f"maxpool 输出: {x.shape}")
         
         # 四个SE阶段
         x = self.layer1(x)
-        print(f"layer1 输出: {x.shape}")
+        # print(f"layer1 输出: {x.shape}")
         x = self.layer2(x)
-        print(f"layer2 输出: {x.shape}")
+        # print(f"layer2 输出: {x.shape}")
         x = self.layer3(x)
-        print(f"layer3 输出: {x.shape}")
+        # print(f"layer3 输出: {x.shape}")
         x = self.layer4(x)
-        print(f"layer4 输出: {x.shape}")
+        # print(f"layer4 输出: {x.shape}")
         
         # 分类头
         x = self.avgpool(x)
-        print(f"avgpool 输出: {x.shape}")
+        # print(f"avgpool 输出: {x.shape}")
         x = torch.flatten(x, 1)
-        print(f"flatten 输出: {x.shape}")
+        # print(f"flatten 输出: {x.shape}")
         x = self.fc(x)
-        print(f"fc 输出: {x.shape}")
+        # print(f"fc 输出: {x.shape}")
         
         return x 

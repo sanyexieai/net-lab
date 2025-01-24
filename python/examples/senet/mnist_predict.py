@@ -44,7 +44,7 @@ def main():
     ).to(device)
     
     # 加载模型权重
-    model_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../models/mnist'))
+    model_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../models/mnist/se'))
     model_path_safetensors = os.path.join(model_dir, 'senet_mnist.safetensors')
     model_path_pth = os.path.join(model_dir, 'senet_mnist.pth')
     

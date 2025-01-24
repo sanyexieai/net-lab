@@ -54,7 +54,7 @@ def main():
     ).to(device)
     
     # 加载模型权重
-    model_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../models/cifar'))
+    model_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../models/cifar/se'))
     model_path_safetensors = os.path.join(model_dir, 'senet_cifar.safetensors')
     model_path_pth = os.path.join(model_dir, 'senet_cifar.pth')
     

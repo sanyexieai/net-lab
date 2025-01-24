@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
-from neural_networks.models.senet import SENet
+from neural_networks.models.sknet import SKNet
 from safetensors.torch import save_model, load_model
 import os
 import sys
@@ -27,34 +27,15 @@ def main():
     
     print(f"数据集路径: {data_path}")
     
-    # 检查压缩包和解压目录
-    cifar_tar = os.path.join(data_path, 'cifar-10-python.tar.gz')
-    cifar_dir = os.path.join(data_path, 'cifar-10-batches-py')
-    
-    # 如果压缩包存在但损坏，删除它
-    if os.path.exists(cifar_tar):
-        try:
-            print(f"发现压缩包: {cifar_tar}")
-            if not os.path.exists(cifar_dir):
-                print("压缩包未解压，尝试手动解压...")
-                import tarfile
-                with tarfile.open(cifar_tar, 'r:gz') as tar:
-                    tar.extractall(data_path)
-                print("手动解压完成")
-        except (EOFError, tarfile.ReadError) as e:
-            print(f"压缩包损坏: {e}")
-            print("删除损坏的压缩包...")
-            os.remove(cifar_tar)
-            if os.path.exists(cifar_dir):
-                import shutil
-                print("删除不完整的解压目录...")
-                shutil.rmtree(cifar_dir)
-    
-    # 加载 CIFAR-10 数据集
+    # 数据预处理
     transform = transforms.Compose([
-        transforms.Resize(224),
+        transforms.Resize(128),      # 保持128x128的输入尺寸
+        transforms.CenterCrop(128),  # 确保图像大小一致
         transforms.ToTensor(),
-        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+        transforms.Normalize(
+            mean=[0.485, 0.456, 0.406],  # ImageNet标准化参数
+            std=[0.229, 0.224, 0.225]
+        )
     ])
     
     print("准备数据集...")
@@ -62,14 +43,17 @@ def main():
     test_dataset = datasets.CIFAR10(data_path, train=False, download=True, transform=transform)
     print("数据集准备完成")
     
-    train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
-    test_loader = DataLoader(test_dataset, batch_size=32)
+    # 使用较小的batch size
+    train_loader = DataLoader(train_dataset, batch_size=8, shuffle=True)
+    test_loader = DataLoader(test_dataset, batch_size=8)
     
-    # 创建模型
-    model = SENet(
-        layers=[2, 2, 2, 2],  # SENet-18 配置
-        num_classes=10,       # CIFAR-10 有 10 个类别
-        in_channels=3         # CIFAR-10 是 RGB 图像
+    # 创建SKNet模型
+    model = SKNet(
+        num_classes=10,         # CIFAR-10 有 10 个类别
+        input_channels=3,       # CIFAR-10 是 RGB 图像
+        base_channels=64,       # 基础通道数
+        layers=[2, 2, 2, 2],    # 网络层配置
+        branches=2              # SK模块的分支数
     ).to(device)
     
     # 定义损失函数和优化器
@@ -77,10 +61,10 @@ def main():
     optimizer = optim.Adam(model.parameters(), lr=0.001)
     
     # 创建保存模型的目录
-    model_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../models/cifar/se'))
+    model_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../models/cifar/sk'))
     os.makedirs(model_dir, exist_ok=True)
-    model_path_pth = os.path.join(model_dir, 'senet_cifar.pth')
-    model_path_safetensors = os.path.join(model_dir, 'senet_cifar.safetensors')
+    model_path_pth = os.path.join(model_dir, 'sknet_cifar.pth')
+    model_path_safetensors = os.path.join(model_dir, 'sknet_cifar.safetensors')
     
     # 如果存在已训练的模型，则加载
     if os.path.exists(model_path_safetensors):
@@ -113,7 +97,7 @@ def main():
                     print(f'Train Epoch: {epoch} [{batch_idx * len(data)}/{len(train_loader.dataset)} '
                           f'({100. * batch_idx / len(train_loader):.0f}%)]\tLoss: {loss.item():.6f}')
             
-            # 在每个epoch后评估并保存最佳模型
+            # 在每个epoch后评估
             model.eval()
             test_loss = 0
             correct = 0
@@ -136,7 +120,7 @@ def main():
             
             # 更新性能记录
             perf.update_training_record(
-                model_type="senet",
+                model_type="sknet",
                 dataset="cifar10",
                 epochs=epoch + 1,
                 accuracy=accuracy,
@@ -146,9 +130,7 @@ def main():
             if is_best:
                 best_acc = accuracy
                 print(f"保存最佳模型，准确率: {accuracy:.2f}%")
-                # 保存 PyTorch 格式
                 torch.save(model.state_dict(), model_path_pth)
-                # 保存 safetensors 格式
                 save_model(model, model_path_safetensors)
                 print(f"模型已保存为 PyTorch 格式: {model_path_pth}")
                 print(f"模型已保存为 safetensors 格式: {model_path_safetensors}")

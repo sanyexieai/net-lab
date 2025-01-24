@@ -22,12 +22,16 @@ class PredictWindow(QMainWindow):
         self.image_path = None  # 添加图片路径存储
         self.model_paths = {
             'MNIST': {
-                'safetensors': os.path.abspath(os.path.join(os.path.dirname(__file__), '../../models/mnist/senet_mnist.safetensors')),
-                'pth': os.path.abspath(os.path.join(os.path.dirname(__file__), '../../models/mnist/senet_mnist.pth'))
+                'safetensors': os.path.abspath(os.path.join(os.path.dirname(__file__), 
+                    '../../models/mnist/se/senet_mnist.safetensors')),
+                'pth': os.path.abspath(os.path.join(os.path.dirname(__file__), 
+                    '../../models/mnist/se/senet_mnist.pth'))
             },
             'CIFAR-10': {
-                'safetensors': os.path.abspath(os.path.join(os.path.dirname(__file__), '../../models/cifar/senet_cifar.safetensors')),
-                'pth': os.path.abspath(os.path.join(os.path.dirname(__file__), '../../models/cifar/senet_cifar.pth'))
+                'safetensors': os.path.abspath(os.path.join(os.path.dirname(__file__), 
+                    '../../models/cifar/se/senet_cifar.safetensors')),
+                'pth': os.path.abspath(os.path.join(os.path.dirname(__file__), 
+                    '../../models/cifar/se/senet_cifar.pth'))
             }
         }
         self.loadDefaultModel()
