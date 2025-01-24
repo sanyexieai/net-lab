@@ -875,3 +875,9 @@ python/models/model_performance.py
 python/models/performance.json
 python/models/mnist/se/senet_mnist.pth
 python/models/mnist/se/senet_mnist.safetensors
+python/models/cifar/se/senet_cifar.pth
+python/models/cifar/se/senet_cifar.safetensors
+python/models/cifar/sk/sknet_cifar.pth
+python/models/cifar/sk/sknet_cifar.safetensors
+python/models/mnist/sk/sknet_mnist.pth
+python/models/mnist/sk/sknet_mnist.safetensors
